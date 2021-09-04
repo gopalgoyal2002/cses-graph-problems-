@@ -36,7 +36,7 @@ const int N = 3e5, M = N;
 //=======================
 
 int a[N];
-vector<vector<ll>>v(500,vector<ll>(500,1e18));
+vector<vector<ll>>v(500,vector<ll>(500,1e9));
 
 
 int main() {
@@ -44,7 +44,7 @@ int main() {
     srand(chrono::high_resolution_clock::now().time_since_epoch().count());
 
        int n,m,q;
-    cin>>n>>m>>q;
+    cin>>n>>m;
     
     while(m--)
     {
@@ -53,9 +53,10 @@ int main() {
        cin>>a>>b;
        cin>>t;
        a--,b--;
-       v[a][b]=min(v[a][b],t);
-       v[b][a]=min(v[b][a],t);
+       v[a][b]=t;
+       
     }
+    cin>>q;
     for(int i=0;i<n;i++)
     {
         v[i][i]=0;
@@ -75,7 +76,7 @@ int main() {
         int a,b;
         cin>>a>>b;
         a--,b--;
-        if(v[a][b]!=1e18)
+        if(v[a][b]<1e9)
         cout<<v[a][b]<<endl;
         else 
         cout<<-1<<endl;
