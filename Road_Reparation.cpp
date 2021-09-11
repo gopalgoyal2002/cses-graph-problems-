@@ -21,12 +21,6 @@ typedef vector<pl>		vpl;
 typedef vector<vi>		vvi;
 typedef vector<vl>		vvl;
 mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
-
-int mpow(int base, int exp); 
-void ipgraph(int n, int m);
-
-void uni(int x,int y,vector<int>&parent,vector<int>&rank);
-int find(int x,vector<int>&parent);
 const int mod = 1'000'000'007;
 const int N = 3e5, M = N;
  const int V=100000;  
@@ -35,12 +29,63 @@ const int N = 3e5, M = N;
 vpl g[N];
 int a[N];
   vector<bool>vis(N,false);
- 
+  vector<int>parent(N);
+  vector<vector<ll>>v(N,vector<ll>(3));
+int mpow(int base, int exp); 
+void ipgraph(int n, int m);
+
+// ------------------------------union and find>
+
+  int find(int x)
+    {
+        if(parent[x]==x)
+        return x;
+      parent[x]= find(parent[x]);
+        return parent[x];
+    }
+    
+    void uni(int x,int y)
+    {   
+        int x_rep=find(x);
+        int y_rep=find(y);
+       
+        if(x_rep==y_rep)
+        return ;
+        parent[y_rep]=x_rep;
+        return ;
+    }
+// ------------------------------union and find>
+int c=0;
+int x=0;
+ ll kruskal_algo()
+ {
+      sort(v.begin(),v.end());
+      ll res=0;
+     for(int i=0;i<v.size();i++){
+       int a=v[i][1];
+       int b=v[i][2];
+       int t=v[i][0];
+     int  x_rep=find(a);
+     int  y_rep=find(b);
+       if(x_rep!=y_rep)
+       {   x++;
+           res+=t;
+           uni(x_rep,y_rep);
+       }
+     }
+     if(x!=c-1)
+     return -1;
+          return res;
+ }
 void solve() {
   
 int n;
 cin>>n;
-
+c=n;
+for(int i=0;i<n;i++)
+{
+    parent[i]=i;
+}
 int m;
 cin>>m;
 while(m--)
@@ -48,36 +93,13 @@ while(m--)
    ll int a,b,t;
     cin>>a>>b>>t;
     a--,b--;
-    g[a].push_back({t,b});
-    g[b].push_back({t,a});
+   v.push_back({t,a,b});
 }
-priority_queue<pair<ll,ll>,vector<pair<ll,ll>>,greater<pair<ll,ll>>>pq;
-vector<ll>dest(N,1e18);
-pq.push({0,0});
-vis[0]=true;
-ll int c=0;
-dest[0]=0;
-while(!pq.empty())
-{
-    int u=pq.top().second;
-    ll int t=pq.top().first;
-    pq.pop();
-    for(auto v:g[u])
-    {
-        if(dest[v.second]>dest[u]+v.first)
-        {
-            dest[v.second]=dest[u]+v.first;
-            vis[v.second]=true;
-            pq.push({dest[v.second],v.second});
-            c+=v.first;
-        }
-    }
-   
-}
- for(int i=0;i<n;i++)
-    cout<<dest[i]<<" ";
-    cout<<c<<endl;
-
+ll int ans=kruskal_algo();
+if(ans==-1)
+cout<<"IMPOSSIBLE";
+else
+cout<<ans;
 }
 
 int main() {
@@ -101,32 +123,5 @@ int mpow(int base, int exp) {
   return result;
 }
 
-    int find(int x,vector<int>&parent)
-    {
-        if(parent[x]==x)
-        return x;
-      parent[x]= find(parent[x],parent);
-        return parent[x];
-    }
-    
-    void uni(int x,int y,vector<int>& parent,vector<int>&rank)
-    {   
-        int x_rep=find(x,parent);
-        int y_rep=find(y,parent);
-        if(x_rep==y_rep)
-        return ;
-       else if(rank[x_rep]<rank[y_rep])
-        {
-            parent[x_rep]=y_rep;
-        }
-        else if(rank[x_rep]>rank[y_rep])
-        {
-            parent[y_rep]=x_rep;
-        }
-        else
-        {
-            parent[y_rep]=x_rep;
-            rank[x_rep]++;
-        }
-    }
+  
 
