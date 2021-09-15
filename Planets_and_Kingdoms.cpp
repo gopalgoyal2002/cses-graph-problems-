@@ -1,10 +1,3 @@
-#include<bits/stdc++.h>
-using namespace std;
-
-const int N=1e5+5;
-
-vector<int>g[N],g1[N];
-
 
 ///disjoint set
 // vector<int>parent(N);
@@ -36,11 +29,11 @@ vector<int>g[N],g1[N];
      
 // }
 ///disjoint set
-vector<int>top;
-vector<bool>vis(false,N);
-vector<int>in(N,0);
-vector<int>ans(N);
-int c=1;
+// vector<int>top;
+// vector<bool>vis(false,N);
+
+// vector<int>ans(N);
+// int c=1;
 // void topo(int u)
 // {
 //     vis[u]=true;
@@ -55,67 +48,15 @@ int c=1;
 //     st.push(u);
 
 // }
-void dfs(int u)
-{
-    vis[u]=true;
-    ans[u]=c;
-    for(auto v:g1[u])
-    {
-        if(vis[v]==false)
-        {
-            dfs(v);
-        }
-    }
-}
-int main(){
-    int n,m;
-    cin>>n>>m;
 
-    while(m--)
-    {
-        int a,b;
-        cin>>a>>b;
-        a--,b--;
-       g[a].push_back(b);
-       g1[b].push_back(a);
-       in[b]++;
-    }
-    
-    // for(int i=0;i<n;i++)
+// int main(){
+   
+    // while(!st.empty())
     // {
-    // if(vis[i]==false)
-    // topo(i);
+    //     cout<<st.top()<<" ";
+    //     cout<<endl;
+    //     st.pop();
     // }
-    queue<int>q;
-     int x=INT_MAX;
-     for(int i=0;i<n;i++)
-     {
-         x=min(x,in[i]);
-     }
-     for(int i=0;i<n;i++)
-     {
-         if(in[i]==x)
-         q.push(i);
-     }
-     while(!q.empty())
-     {
-         int l=q.size();
-         while(l--)
-         {
-             int u=q.front();
-             cout<<u<<" ";
-             q.pop();
-             
-             for(auto v:g[u])
-             {
-                 
-                     in[v]--;
-                     if(in[v]==0)
-                     q.push(v);
-                 
-             }
-         }
-     }
    
     // vis=vector<bool>(false,N);
     // for(int i=0;i<top.size();i++)
@@ -129,4 +70,141 @@ int main(){
     // for(int i=0;i<n;i++)
     // cout<<ans[i]<<" ";
 
+
+#include<bits/stdc++.h>
+using namespace std;
+#define gc getchar_unlocked
+#define fo(i,n) for(int i=0;i<n;i++)
+#define Fo(i,k,n) for(i=k;k<n?i<n:i>n;k<n?i+=1:i-=1)
+#define ll long long
+
+
+#define deb(x) cout << #x << "=" << x << endl
+#define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
+#define pb push_back
+#define mp make_pair
+#define F first
+#define S second
+#define all(x) x.begin(), x.end()
+#define clr(x) memset(x, 0, sizeof(x))
+#define sortall(x) sort(all(x))
+#define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
+#define PI 3.1415926535897932384626
+typedef pair<int, int>	pii;
+typedef pair<ll, ll>	pl;
+typedef vector<int>             vi;
+typedef vector<ll>		vl;
+typedef vector<pii>		vpii;
+typedef vector<pl>		vpl;
+typedef vector<vi>		vvi;
+typedef vector<vl>		vvl;
+mt19937_64 rang(chrono::high_resolution_clock::now().time_since_epoch().count());
+int rng(int lim) {
+	uniform_int_distribution<int> uid(0,lim-1);
+	return uid(rang);
 }
+int mpow(int base, int exp); 
+void ipgraph(int n, int m);
+
+
+const int mod = 1'000'000'007;
+const int N = 3e5, M = N;
+//=======================
+vi g[N],g1[N];
+int a[N];
+vector<bool>vis(N,false);
+void solve() {
+  int i, j, n, m;
+}
+
+void dfs(int u, stack<int>&st){
+     vis[u]=true;
+	for(int v:g[u]){
+		if (vis[v]==true) continue;
+		dfs(v, st);
+	}
+    st.push(u);
+    
+}
+ vector<int>ans(N);
+ int c=0;
+void dfs1(int u){
+     vis[u]=true;
+     ans[u]=c;
+	for(int v:g1[u]){
+		if (vis[v]==true) continue;
+		dfs1(v);
+	}
+    
+    
+}
+
+
+
+int main() {
+    ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    srand(chrono::high_resolution_clock::now().time_since_epoch().count());
+
+    int t = 1;
+   int n,m;
+    cin>>n>>m;
+
+    while(m--)
+    {
+        int a,b;
+        cin>>a>>b;
+        a--,b--;
+       g[a].push_back(b);
+      g1[b].push_back(a);
+      
+    }
+    stack<int>st;
+    for(int i=0;i<n;i++)
+    {
+    if(vis[i]==false)
+        dfs(i,st);
+    }
+   vis=vector<bool>(N,false);
+    while(!st.empty())
+    { 
+        if(vis[st.top()]==true)
+        {
+            st.pop();
+            continue;
+        }
+        c++;
+        dfs1(st.top());
+        st.pop();
+        
+
+
+    }
+    cout<<c<<endl;
+    for(int i=0;i<n;i++)
+    cout<<ans[i]<<" ";
+
+    return 0;
+}
+
+int mpow(int base, int exp) {
+  base %= mod;
+  int result = 1;
+  while (exp > 0) {
+    if (exp & 1) result = ((ll)result * base) % mod;
+    base = ((ll)base * base) % mod;
+    exp >>= 1;
+  }
+  return result;
+}
+
+void ipgraph(int n, int m){
+	int i, u, v;
+	while(m--){
+		cin>>u>>v;
+    u--, v--;
+		g[u].pb(v);
+		g[v].pb(u);
+	}
+}
+
+
